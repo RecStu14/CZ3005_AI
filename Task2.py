@@ -1,8 +1,24 @@
 import json, timeit
 from collections import deque # deque = Doubly Ended Queue
 
+def sortEcost(node, nlist, Cost):
+    Q = deque()
+    Q.append(nlist[0])
+    ptr = 0
+
+    for adj in nlist[1:]:
+        while ptr < len(Q):
+            if Cost[node+","+adj] <= Cost[node+","+nlist[ptr]]:
+                Q.appendleft(adj)
+                break
+            elif ptr == len(Q)-1:
+                Q.append(adj)
+            else:
+                ptr+=1
+    return Q
+
 # g - python dict, v - start node, w - end node
-def BFS(g, Dist, Cost, v, w):
+def UCS(g, Dist, Cost, v, w):
     # Queue to record adjacent nodes
     Pqueue = deque()
     
@@ -19,7 +35,8 @@ def BFS(g, Dist, Cost, v, w):
 
     # while target vortex is not reached
     while True:
-        for adj in g[ptr]:
+        list = sortEcost(ptr, g[ptr], Cost)
+        for adj in list:
             eCost = d[int(ptr)-1][1] + Cost[ptr+","+adj]
             
             # if unvisited and within budget
@@ -72,7 +89,7 @@ while again == "y":
     end = input("end node [1-264346]: ")
     
     t2 = timeit.default_timer()
-    path = BFS(G_dict, Dist, Cost, start, end)
+    path = UCS(G_dict, Dist, Cost, start, end)
     t3 = timeit.default_timer()
 
     if path[0] is not None:
@@ -83,6 +100,9 @@ while again == "y":
         print()
         print("Shortest Distance: " + str(path[0]))
         print("Total Energy Cost: " + str(path[1]))
+        print("Time taken: " + str(round(t3-t2, 3)))
+    else:
+        print("Cannot find path within budget")
         print("Time taken: " + str(round(t3-t2, 3)))
         
     again = input("Do you want to find path again? (y/n)")

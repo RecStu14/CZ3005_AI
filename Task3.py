@@ -92,6 +92,7 @@ class Graph:
                 self.print_result(path)
                 print("Distance: ", g[stop])
                 print("Energy: ", energy_cost[stop])
+                #print("Nodes expanded:", len(closed_list))
                 return
 
             # For all the neighbors of the current node
@@ -139,13 +140,14 @@ class Graph:
 
 import json
 import time
+import sys
 
-COORD_FILE = "Coord.json"
-COST_FILE = "Cost.json"
-G_FILE = "G.json"
-COORD_FILE = "Coord.json"
-DIST_FILE = "Dist.json"
-COMBINED_FILE = "New_Adjlist.json"
+COORD_FILE = 'Coord.json'
+COST_FILE = 'Cost.json'
+G_FILE = 'G.json'
+COORD_FILE = 'Coord.json'
+DIST_FILE = 'Dist.json'
+COMBINED_FILE = 'New_Adjlist.json'
 
 max_energy = 287932
 total_v = 264346
@@ -177,7 +179,7 @@ def read_new_json_data():
 
 
 data_combined, data_coord = read_new_json_data()
-print("Running Task 3 - A* Search Algorithm")
+print("Running Task 3 - A* Search Algorithm...")
 again = 'y'
 while (again == 'y'):
     start = input("Enter your start node:")
@@ -189,7 +191,7 @@ while (again == 'y'):
     time_start = time.time()
     graph1.a_star(start, stop, max_energy)
     time_end = time.time()
-    print(f"Runtime of the program is {time_end - time_start}")
+    #print(f"Runtime of the program is {time_end - time_start}")
     again = input("Run again? (Y/N)")
     again = again.lower()
 

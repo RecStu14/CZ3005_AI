@@ -53,17 +53,7 @@ def UCS(g, Dist, Cost, v, w):
                     d[int(adj)-1][1] = eCost
                     d[int(adj)-1][2] = tmp[:]
 
-            # if visited but a better path found, replace
-            elif eCost < d[int(adj)-1][1]:
-                Pqueue.appendleft(adj)
-
-                dCost = d[int(ptr)-1][0] + Dist[ptr+","+adj]
-                tmp = d[int(ptr)-1][2][:]
-                tmp.append(adj)
-
-                d[int(adj)-1][0] = dCost
-                d[int(adj)-1][1] = eCost
-                d[int(adj)-1][2] = tmp[:]
+            
 
         # if no more nodes connected to source vertex
         if len(Pqueue) == 0:
@@ -93,7 +83,7 @@ while again == "y":
     t3 = timeit.default_timer()
 
     if path[0] is not None:
-        print("Path Length: " + str(len(path[2])))
+        print("No. of Nodes visited: " + str(len(path[2])))
         print("Shortest Path:", end = " ")
         for node in path[2]:
             print(node, end ="->")

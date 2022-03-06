@@ -1,5 +1,5 @@
 import math
-from scipy.spatial.distance import cityblock
+
 
 class Graph:
     def __init__(self, adjac_lis, coord_lis):
@@ -17,8 +17,8 @@ class Graph:
         #return self.calculate_edist(self.get_coord(stop),self.get_coord(v))
         return self.calculate_diagonal(self.get_coord(stop),self.get_coord(v))
 
-    def calculate_manhattan(self,e_coord, v_coord):
-        return cityblock(v_coord,e_coord)
+    #def calculate_manhattan(self,e_coord, v_coord):
+    #    return cityblock(v_coord,e_coord)
 
     def calculate_edist(self, e_coord, v_coord):
         x1, y1 = e_coord[0], e_coord[1]
@@ -49,7 +49,7 @@ class Graph:
         return path
 
     def print_result(self, path):
-        print("Shortest Path:\n" + "->".join(path))
+        print("Shortest Path:\n" + " -> ".join(path))
 
     def a_star(self, start, stop, max_energy):
 
@@ -90,8 +90,9 @@ class Graph:
             if current == stop:
                 path = self.return_path(parent, stop)
                 self.print_result(path)
-                print("Distance: ", g[stop])
-                print("Energy: ", energy_cost[stop])
+                print("Shortest Distance:", g[stop])
+                print("Total Energy Cost:", energy_cost[stop])
+                print("\n")
                 #print("Nodes expanded:", len(closed_list))
                 return
 
@@ -142,59 +143,59 @@ import json
 import time
 import sys
 
-COORD_FILE = 'Coord.json'
-COST_FILE = 'Cost.json'
-G_FILE = 'G.json'
-COORD_FILE = 'Coord.json'
-DIST_FILE = 'Dist.json'
-COMBINED_FILE = 'New_Adjlist.json'
+def run_task3():
+    COORD_FILE = 'Coord.json'
+    COST_FILE = 'Cost.json'
+    G_FILE = 'G.json'
+    COORD_FILE = 'Coord.json'
+    DIST_FILE = 'Dist.json'
+    COMBINED_FILE = 'New_Adjlist_task3.json'
 
-max_energy = 287932
-total_v = 264346
-total_e = 730100
+    max_energy = 287932
+    total_v = 264346
+    total_e = 730100
 
-# To Generate the new list
-def regenerate_adjlist(data_g, data_dist, data_cost):
-    new_adjlist = {}
-    for key in data_g.keys():
-        final = []
-        for neighbour in data_g[key]:
-            details = [neighbour, (data_dist[str(key+","+neighbour)],data_cost[str(key+","+neighbour)])]
-            final.append(details)
-        new_adjlist[key]= final
-    f = open("data/New_Adjlist.json", "w")
-    json.dump(new_adjlist, f)
-    f.close()
-
-
-def read_new_json_data():
-
-    with open(COMBINED_FILE) as json_file:
-        data_combined = json.load(json_file)
-
-    with open(COORD_FILE) as json_file:
-        data_coord = json.load(json_file)
-
-    return data_combined, data_coord
+    # To Generate the new list
+    def regenerate_adjlist(data_g, data_dist, data_cost):
+        new_adjlist = {}
+        for key in data_g.keys():
+            final = []
+            for neighbour in data_g[key]:
+                details = [neighbour, (data_dist[str(key+","+neighbour)],data_cost[str(key+","+neighbour)])]
+                final.append(details)
+            new_adjlist[key]= final
+        f = open("data/New_Adjlist_task3.json", "w")
+        json.dump(new_adjlist, f)
+        f.close()
 
 
-data_combined, data_coord = read_new_json_data()
-print("Running Task 3 - A* Search Algorithm...")
-again = 'y'
-while (again == 'y'):
-    start = input("Enter your start node:")
-    stop = input("Enter your end node:")
-    start.strip(" ")
-    stop.strip(" ")
-    graph1 = Graph(data_combined, data_coord)
-    print("Calculating path from: ", start , "->", stop, ", with", max_energy, "energy constraint...")
-    time_start = time.time()
-    graph1.a_star(start, stop, max_energy)
-    time_end = time.time()
-    #print(f"Runtime of the program is {time_end - time_start}")
-    again = input("Run again? (Y/N)")
-    again = again.lower()
+    def read_new_json_data():
 
+        with open(COMBINED_FILE) as json_file:
+            data_combined = json.load(json_file)
+
+        with open(COORD_FILE) as json_file:
+            data_coord = json.load(json_file)
+
+        return data_combined, data_coord
+
+
+    data_combined, data_coord = read_new_json_data()
+    #print("Running Task 3 - A* Search Algorithm...")
+    again = 'y'
+    while (again == 'y'):
+        start = input("Please enter the start node:")
+        stop = input("Please enter the end node:")
+        start.strip(" ")
+        stop.strip(" ")
+        graph1 = Graph(data_combined, data_coord)
+        #print("Calculating path from: ", start , "->", stop, ", with", max_energy, "energy constraint...")
+        time_start = time.time()
+        graph1.a_star(start, stop, max_energy)
+        time_end = time.time()
+        #print(f"Runtime of the program is {time_end - time_start}")
+        again = input("Run again? [y/n]")
+        again = again.lower()
 
 
 

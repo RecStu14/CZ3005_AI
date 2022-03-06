@@ -64,38 +64,41 @@ def UCS(g, Dist, Cost, v, w):
     return d[int(w)-1]
    
         
-# Open JSON file
-f = open('G.json')
-f1 = open('Dist.json')
-f2 = open('Cost.json')
+def run_task2():
+    # Open JSON file
+    f = open('G.json')
+    f1 = open('Dist.json')
+    f2 = open('Cost.json')
 
-# convert to Python dictionary (node n, list of adjacent nodes)
-G_dict = json.load(f)
-Dist = json.load(f1)
-Cost = json.load(f2)
-again = "y"
-while again == "y":
-    start = input("start node [1-264346]: ")
-    end = input("end node [1-264346]: ")
-    
-    t2 = timeit.default_timer()
-    path = UCS(G_dict, Dist, Cost, start, end)
-    t3 = timeit.default_timer()
+    # convert to Python dictionary (node n, list of adjacent nodes)
+    G_dict = json.load(f)
+    Dist = json.load(f1)
+    Cost = json.load(f2)
+    again = "y"
 
-    if path[0] is not None:
-        print("No. of Nodes visited: " + str(len(path[2])))
-        print("Shortest Path:", end = " ")
-        for node in path[2]:
-            print(node, end ="->")
-        print()
-        print("Shortest Distance: " + str(path[0]))
-        print("Total Energy Cost: " + str(path[1]))
-        print("Time taken: " + str(round(t3-t2, 3)))
-    else:
-        print("Cannot find path within budget")
-        print("Time taken: " + str(round(t3-t2, 3)))
+    while again == "y":
+        start = input("Please enter the start node: ")
+        end = input("Please enter the end node: ")
         
-    again = input("Do you want to find path again? (y/n)")
+        t2 = timeit.default_timer()
+        path = UCS(G_dict, Dist, Cost, start, end)
+        t3 = timeit.default_timer()
 
-# Closing file
-f.close()
+        if path[0] is not None:
+            #print("Path Length: " + str(len(path[2])))
+            print("Shortest Path:\n",)
+            #for node in path[2]:
+                #print(node, end ="->")
+            print(" -> ".join(path[2]))
+            print("Shortest Distance: " + str(path[0]))
+            print("Total Energy Cost: " + str(path[1]))
+            print("\n")
+            #print("Time taken: " + str(round(t3-t2, 3)))
+        else:
+            print("Cannot find path within budget")
+            print("Time taken: " + str(round(t3-t2, 3)))
+            
+        again = input("Do you want to find path again? [y/n]")
+
+    # Closing file
+    f.close()
